@@ -61,7 +61,16 @@
         },
 
         yearSelected: function () {
-            selectDateList.options.length = 0;
+
+            ratingsData.length = 0;
+            var rows = ratingEntriesTable.getElementsByTagName('tr');
+            var rowsCount = rows.length;
+
+            for (var i = rowsCount - 1; i >= 0; i--) {
+                ratingEntriesTable.removeChild(rows[i]);
+            }
+            selectDateList.length = 0;
+
             var selectedYear = selectYearList.value;
             var httpRequest = new XMLHttpRequest();
 
@@ -74,6 +83,8 @@
 
             httpRequest.onreadystatechange = function () {
                 if (httpRequest.readyState == 4) {
+                    dates = [];
+                    dateFiles = [];
                     document.getElementById("progressBar").style.visibility = "visible";
                     var response = httpRequest.responseText;
                     var processedResponse = response.split("\n");
@@ -100,6 +111,7 @@
                         var selectedDate = selectDateList.value;
                         var dateFile = dateFiles[index];
                         var dat = dates[index];
+                        document.getElementById("selectedDateText").textContent = "Ratings from selected date: " + selectedDate;
                         console.log("Selected date: " + selectedDate + ", index: " + index + ", datesIndex: " + dat + ", dateFilesIndex: " + dateFile);
                         var xmlRequest = new XMLHttpRequest();
                         var url = 'http://api.nbp.pl/api/exchangerates/tables/a/' + selectedDate + '?format=xml';
@@ -142,10 +154,6 @@
             }
             httpRequest.send();
         },
-
-        getAllRatingsFromDate: function () {
-
-        }
     });
 
 }());
