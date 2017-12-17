@@ -6,6 +6,7 @@
     <SharedGUID>b31974b2-e30f-4b20-b85e-e1dfba839d05</SharedGUID>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)js\currencies.js" />
     <Content Include="$(MSBuildThisFileDirectory)js\default.js" />
   </ItemGroup>
 </Project>

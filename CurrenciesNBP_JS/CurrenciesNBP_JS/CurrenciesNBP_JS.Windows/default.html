@@ -13,7 +13,57 @@
     <link href="/css/default.css" rel="stylesheet" />
     <script src="/js/default.js"></script>
 </head>
-<body>
-    <p>Content goes here</p>
+<body class="win-type-body">
+    <div align="center" style="margin-top: 10px;">
+        <progress id="progressBar"></progress>
+    </div>
+    <table id="gridTable" class="table table-striped table-hover" border="1" style="margin-top: 20px;">
+        <tr>
+            <td width="200px">
+                <div style="margin-left: 30px; margin-right: 10px">Select year:</div>
+            </td>
+            <td width="300px" style="vertical-align: central">
+                <select id="selectYear" class="styled-select" style="border-style: outset; margin-right: 10px; width: 350px"></select>
+            </td>
+            <td width="300px" style="vertical-align: central">
+                <button class="win-button" onclick="" style="margin-right: 10px; width: 350px">Search for dates</button>
+            </td>
+            <td width="200px">
+                <div style="margin-left: 30px; margin-right: 10px">Select date:</div>
+            </td>
+            <td width="300px" style="vertical-align: central">
+                <select id="selectDate" class="styled-select" style="border-style: outset; margin-right: 10px; width: 350px"></select>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="5" style="padding-top: 20px; padding-bottom: 20px;">Ratings from selected date:</th>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table id="currenciesTable" class="table table-striped table-hover" border="1">
+                    <thead>
+                        <tr>
+                            <th style="margin-left: auto; padding: 10px" width="200px">Code</th>
+                            <th style="margin-left: auto; padding: 10px" width="400px">Name</th>
+                            <th style="margin-left: auto; padding: 10px" width="300px">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratingEntries"></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table id="templateTable" class="table table-striped table-hover" align="center">
+        <tbody id="currencyTemplate" class="div-display-items" data-win-control="WinJS.Binding.Template">
+            <tr>
+                <td style="margin-left: auto; padding: 20px" width="200px" data-win-bind="innerText:code"></td>
+                <td style="margin-left: auto; padding: 20px" width="400px" data-win-bind="innerText:name"></td>
+                <td style="margin-left: auto; padding: 20px" width="300px" data-win-bind="innerText:rating"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="currencies.js"></script>
+
 </body>
 </html>
