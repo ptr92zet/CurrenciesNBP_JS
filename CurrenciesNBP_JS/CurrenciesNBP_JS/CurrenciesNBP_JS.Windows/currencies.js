@@ -29,6 +29,7 @@
             this.initYears();
         },
 
+        // init global variables 
         initDocumentElements: function () {
             progressBar = document.getElementById("progressBar");
             templateTable = document.getElementById("templateTable");
@@ -37,6 +38,7 @@
             ratingEntriesTable = document.getElementById("ratingEntries");
         },
 
+        // load available years after application starts
         initYears: function () {
             progressBar.style.visibility = "visible";
             templateTable.style.visibility = "hidden";
@@ -56,12 +58,12 @@
             }
 
             selectYearList.onchange = this.yearSelected;
-
             progressBar.style.visibility = "hidden";
         },
 
+        // year selected
         yearSelected: function () {
-
+            progressBar.style.visibility = "visible";
             ratingsData.length = 0;
             var rows = ratingEntriesTable.getElementsByTagName('tr');
             var rowsCount = rows.length;
@@ -81,11 +83,12 @@
                 httpRequest.open("GET", 'http://www.nbp.pl/kursy/xml/dir' + selectedYear + '.txt');
             }
 
+            // populating selectDateList with files from selected year
             httpRequest.onreadystatechange = function () {
                 if (httpRequest.readyState == 4) {
                     dates = [];
                     dateFiles = [];
-                    document.getElementById("progressBar").style.visibility = "visible";
+                    
                     var response = httpRequest.responseText;
                     var processedResponse = response.split("\n");
                     for (var i = 0; i < processedResponse.length - 1; i++) {
@@ -103,8 +106,9 @@
                         option.value = dates[i];
                         selectDateList.appendChild(option);
                     }
-                    document.getElementById("progressBar").style.visibility = "hidden";
+                    progressBar.style.visibility = "hidden";
 
+                    // single date selected
                     selectDateList.onchange = function () {
                         progressBar.style.visibility = "visible";
                         var index = selectDateList.selectedIndex;
@@ -117,6 +121,8 @@
                         var url = 'http://api.nbp.pl/api/exchangerates/tables/a/' + selectedDate + '?format=xml';
                         console.log("URL: " + url);
                         xmlRequest.open("GET", url);
+
+                        // download currency ratings from selected date
                         xmlRequest.onreadystatechange = function () {
                             if (xmlRequest.readyState == 4) {
                                 var xml = xmlRequest.responseXML;
@@ -126,26 +132,26 @@
                                     names[i] = rateElements[i].getElementsByTagName("Currency")[0].childNodes[0].nodeValue;
                                     ratings[i] = rateElements[i].getElementsByTagName("Mid")[0].childNodes[0].nodeValue;
                                 }
-                                setTimeout(function () {
-                                    progressBar.style.visibility = "visible";
-                                    ratingsData.length = 0;
-                                    var rows = ratingEntriesTable.getElementsByTagName('tr');
-                                    var rowsCount = rows.length;
 
-                                    for (var i = rowsCount - 1; i >= 0; i--) {
-                                        ratingEntriesTable.removeChild(rows[i]);
-                                    }
+                                // display currency ratings with the template table
+                                
+                                ratingsData.length = 0;
+                                var rows = ratingEntriesTable.getElementsByTagName('tr');
+                                var rowsCount = rows.length;
 
-                                    var templateControl = document.getElementById("currencyTemplate").winControl;
-                                    for (var i = 0; i < codes.length; i++) {
-                                        ratingsData.push({ code: codes[i], name: names[i], rating: ratings[i] });
-                                    }
-                                    ratingsData.forEach(function (rating) {
-                                        templateControl.render(rating, ratingEntriesTable);
-                                    })
-                                    templateTable.style.visibility = "visible";
-                                    progressBar.style.visibility = "hidden";
-                                }, 2000);
+                                for (var i = rowsCount - 1; i >= 0; i--) {
+                                    ratingEntriesTable.removeChild(rows[i]);
+                                }
+
+                                var templateControl = document.getElementById("currencyTemplate").winControl;
+                                for (var i = 0; i < codes.length; i++) {
+                                    ratingsData.push({ code: codes[i], name: names[i], rating: ratings[i] });
+                                }
+                                ratingsData.forEach(function (rating) {
+                                    templateControl.render(rating, ratingEntriesTable);
+                                })
+                                templateTable.style.visibility = "visible";
+                                progressBar.style.visibility = "hidden";
                             }
                         }
                         xmlRequest.send();
